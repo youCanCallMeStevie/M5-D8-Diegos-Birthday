@@ -1,4 +1,6 @@
 const express = require("express");
+const { Transform } = require("json2csv")
+const { pipeline } = require("stream")
 const uniqid = require("uniqid");
 const attendeesRouter = express.Router();
 const multer = require("multer");
@@ -15,7 +17,7 @@ const attendeeValidation = [
   check("tOA").exists().withMessage("time on arrival is required"),
 ];
 
-router.post("/", attendeeValidation, async (req, res, next) => {
+attendeesRouter.post("/", attendeeValidation, async (req, res, next) => {
   try {
     const validationErrors = validationResult(req);
     const guests = await getGuestList();
@@ -42,7 +44,7 @@ router.post("/", attendeeValidation, async (req, res, next) => {
   }
 });
 
-router.get("/csv", async (req, res, next) => {
+attendeesRouter.get("/csv", async (req, res, next) => {
   try {
     const guests = await getGuests();
     if (guests) {
@@ -57,7 +59,7 @@ router.get("/csv", async (req, res, next) => {
   }
 });
 
-router.post("/:attendeesId/createPDF", async (req, res, next) => {
+attendeesRouter.post("/:attendeesId/createPDF", async (req, res, next) => {
   try {
   } catch (error) {}
 });
