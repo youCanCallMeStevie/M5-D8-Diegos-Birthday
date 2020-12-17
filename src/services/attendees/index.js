@@ -18,24 +18,26 @@ const attendeeValidation = [
   check("tOA").exists().withMessage("time on arrival is required"),
 ];
 
-attendeesRouter.post("/", attendeeValidation, async (req, res, next) => {
+attendeesRouter.post("/", async (req, res, next) => {
   try {
-    const validationErrors = validationResult(req);
+    // const validationErrors = validationResult(req);
     const guests = await getGuestList();
-    const guestFound = guests.find(guest => (guest._id = req.body._id));
-    if (!validationErrors.isEmpty() || guestFound) {
-      const err = new Error();
-      err.httpStatusCode = 400;
-      err.message = validationErrors;
-      next(err);
-    } else {
+    // const guestFound = guests.find(guest => (guest._id = req.body._id));
+    // if (!validationErrors.isEmpty()) {
+    //   const err = new Error();
+    //   err.httpStatusCode = 400;
+    //   err.message = validationErrors;
+    //   next(err);
+     {
      const guests = await getGuestList();
-      guests.push({
+      let newGuest = {
         ...req.body,
         _id: uniqid(),
         addedOn: new Date(),
-      });
-      await writeGuestList();
+      }
+      console.log(req.body);
+      guests.push(newGuest);
+      await writeGuestList(guests);
       console.log(guests);
       res.status(201).send("Guest added to Diego's list");
     }
