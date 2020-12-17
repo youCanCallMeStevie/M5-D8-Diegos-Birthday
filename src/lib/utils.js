@@ -1,33 +1,26 @@
-const { writeJSON, readJSON } = require("fs-extra")
-const {join} = require("path")
+const { readJSON, writeJSON } = require("fs-extra")
+const { join } = require("path")
 const attendeesPath = join(__dirname,"../services/attendees/attendees.json")
+
 
 const readDB = async filePath => {
   try {
-    const fileJSON = await readJSON(filePath)
-    console.log(fileJSON)
-    return fileJSON
+    const fileJson = await readJSON(filePath)
+    return fileJson
   } catch (error) {
-   console.log(error)
+    throw new Error(error)
   }
 }
 
-const writeDB = async (filePath, data) => {
-  //writing on disk
+const writeDB = async (filePath, fileContent) => {
   try {
-    console.log(filePath)
-    await writeJSON(filePath, data)
+    await writeJSON(filePath, fileContent)
   } catch (error) {
-   console.log(error)
+    throw new Error(error)
   }
 }
 
 module.exports = {
-  readDB,
-  writeDB,
-  getGuestList: async () => readDB(attendeesPath),
-  writeGuestList: async (guestData) => writeDB(attendeesPath, guestData),
-  // getUsers
-  // getBooks
-
+    getGuestList: async () => readDB(attendeesPath),
+    writeGuestList: async usersData => writeDB(attendeesPath, usersData),
 }
