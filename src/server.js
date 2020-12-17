@@ -15,6 +15,9 @@ const {
 
 const server = express();
 const port = process.env.PORT || 3009;
+
+server.use(express.json());
+
 //ROUTES
 server.use("/attendees", attendeesRoutes)
 

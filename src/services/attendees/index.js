@@ -20,15 +20,15 @@ const attendeeValidation = [
 
 attendeesRouter.post("/", async (req, res, next) => {
   try {
-    // const validationErrors = validationResult(req);
+    const validationErrors = validationResult(req);
     const guests = await getGuestList();
-    // const guestFound = guests.find(guest => (guest._id = req.body._id));
-    // if (!validationErrors.isEmpty()) {
-    //   const err = new Error();
-    //   err.httpStatusCode = 400;
-    //   err.message = validationErrors;
-    //   next(err);
-     {
+    const guestFound = guests.find(guest => (guest._id === req.body._id));
+    if (!validationErrors.isEmpty() && guestFound) {
+      const err = new Error();
+      err.httpStatusCode = 400;
+      err.message = validationErrors;
+      next(err);
+    } else {
      const guests = await getGuestList();
       let newGuest = {
         ...req.body,
